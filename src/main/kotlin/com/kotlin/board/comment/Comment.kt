@@ -8,10 +8,11 @@ import jakarta.persistence.Id
 
 @Entity
 class Comment(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id:Long?=null,
+
         var content: String,
         var writerId:String,
 ):BaseEntity() {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id:Long?=null
 }

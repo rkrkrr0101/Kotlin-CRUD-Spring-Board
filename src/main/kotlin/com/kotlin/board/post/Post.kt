@@ -13,14 +13,14 @@ import org.hibernate.annotations.BatchSize
 
 @Entity
 class Post(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id:Long?=null,
         var title: String,
         var content: String,
         var writerId:String,
+        var viewCount:Long=0
 ) :BaseEntity(){
-    var viewCount:Long=0
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id:Long?=null
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "POST_ID")
     @BatchSize(size=20)
@@ -33,6 +33,11 @@ class Post(
     fun addComment(comment: Comment):Int{
         comments.add(comment)
         return comments.size
+    }
+    fun updatePost(title:String,content: String):Long?{
+        this.title=title
+        this.content=content
+        return id
     }
 
 
