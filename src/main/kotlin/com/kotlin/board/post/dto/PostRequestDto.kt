@@ -5,7 +5,7 @@ import com.kotlin.board.post.Post
 data class PostRequestDto(
         val title:String,
         val content:String,
-        val writerId:String,
+        val writerId:String="",
         val viewCount:Long=0) {
 
     companion object {
@@ -13,8 +13,6 @@ data class PostRequestDto(
             return PostRequestDto(post.title, post.content, post.writerId, post.viewCount)
         }
     }
-    //테스트용
-    fun Post.toRequestDto():PostRequestDto{return PostRequestDto(title, content, writerId, viewCount)}
 
     fun dtoToDomain():Post{
 
