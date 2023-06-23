@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import java.lang.IllegalArgumentException
+import java.lang.Integer.min
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicLong
 
@@ -48,7 +49,10 @@ class MockPostRepository : PostRepository {
         val sortList = posts.sortedBy { it.lastUpdateDate }
         val startIndex = pageable.pageNumber * pageable.pageSize
         val lastIndex=startIndex+pageable.pageSize
-        val pagingList = sortList.subList(startIndex, lastIndex)
+
+        //페이지가 현재배열크기보다 크면 빈배열반환
+        if(startIndex>sortList.size) return PageImpl(mutableListOf<Post>())
+        val pagingList = sortList.subList(startIndex, min(lastIndex,sortList.size))
         return PageImpl(pagingList)
     }
 
@@ -56,8 +60,9 @@ class MockPostRepository : PostRepository {
         val startIndex = pageable.pageNumber * pageable.pageSize
         val lastIndex=startIndex+pageable.pageSize
         val sortList = posts.sortedBy { it.lastUpdateDate }
-        val filterList = sortList.filter { !it.title.contains(title) }
-        val pagingList = filterList.subList(startIndex, lastIndex)
+        val filterList = sortList.filter { it.title.contains(title) }
+        if(startIndex>filterList.size) return PageImpl(mutableListOf<Post>())
+        val pagingList = filterList.subList(startIndex, min(lastIndex,filterList.size))
         return PageImpl(pagingList)
     }
 }
