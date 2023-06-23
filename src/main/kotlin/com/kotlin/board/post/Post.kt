@@ -16,11 +16,12 @@ class Post(
         var title: String,
         var content: String,
         var writerId:String,
-        var viewCount:Long=0
+        var viewCount:Long=0,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id:Long?=null
 ) :BaseEntity(){
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id:Long?=null
+
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "POST_ID")
     @BatchSize(size=20)
