@@ -1,17 +1,15 @@
 package com.kotlin.board.post.service
 
 import com.kotlin.board.comment.dto.CommentRequestDto
+import com.kotlin.board.common.domain.exception.ResourceNotFoundException
 import com.kotlin.board.post.Post
 import com.kotlin.board.post.dto.PostRequestDto
 import com.kotlin.board.post.dto.PostResponseDto
 import com.kotlin.board.post.repository.PostRepository
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.IllegalArgumentException
 
 @Service
 class PostService(val postRepository: PostRepository) {
@@ -33,7 +31,7 @@ class PostService(val postRepository: PostRepository) {
         return postId
     }
     fun findId(postId: Long):Post?{
-        return postRepository.findByIdOrNull(postId)
+        return postRepository.findById(postId)
     }
     fun findPostsPaging(pageable: Pageable):Page<PostResponseDto>{
         val posts = postRepository.findAll(pageable)
@@ -59,6 +57,6 @@ class PostService(val postRepository: PostRepository) {
     }
 
     private fun presentPost(postId: Long) =
-        postRepository.findById(postId).orElse(null) ?: throw IllegalArgumentException("ds")
+        postRepository.findById(postId) ?: throw ResourceNotFoundException("post",postId)
 
 }
