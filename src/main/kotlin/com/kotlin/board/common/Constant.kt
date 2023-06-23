@@ -1,4 +1,4 @@
-package com.kotlin.board.util
+package com.kotlin.board.common
 
 class Constant {
     companion object{
