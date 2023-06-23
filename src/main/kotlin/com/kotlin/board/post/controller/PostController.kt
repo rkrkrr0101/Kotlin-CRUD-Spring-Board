@@ -4,8 +4,8 @@ import com.kotlin.board.comment.dto.CommentRequestDto
 import com.kotlin.board.post.dto.PostRequestDto
 import com.kotlin.board.post.dto.PostResponseDto
 import com.kotlin.board.post.service.PostService
-import com.kotlin.board.util.Constant
-import com.kotlin.board.util.Result
+import com.kotlin.board.common.Constant
+import com.kotlin.board.common.Result
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
