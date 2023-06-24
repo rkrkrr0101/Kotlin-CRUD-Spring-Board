@@ -64,7 +64,7 @@ class PostMockRepositoryTest {
         //g
         val findPost = postRepository.findById(2)?:throw Exception()
         //w
-        findPost.updatePost("changeTitle","changeContent")
+        findPost.update("changeTitle","changeContent")
         val changePost =postRepository.findById(2)?:throw Exception()
         //t
         assertThat(changePost.title).isEqualTo("changeTitle")

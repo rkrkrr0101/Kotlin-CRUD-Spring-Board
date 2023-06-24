@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.lang.IllegalArgumentException
 
 @RestController
 @RequestMapping("/post")
@@ -34,8 +33,8 @@ class PostController(val postService: PostService) {
         return postService.save(requestDto)
     }
     @PostMapping("/add/comment/{id}")
-    fun commentSave(@PathVariable("id") postId: Long,@RequestBody requestDto: CommentRequestDto):Long?{
-        return postService.addComment(postId,requestDto)
+    fun commentSave(@PathVariable("id") postId: Long,@RequestBody commentRequestDto: CommentRequestDto):Long?{
+        return postService.addComment(postId,commentRequestDto)
     }
     @PostMapping("/plus/viewcount/{id}")
     fun plusViewCount(@PathVariable id: Long):Long?{

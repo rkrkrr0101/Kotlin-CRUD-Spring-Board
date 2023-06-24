@@ -21,7 +21,7 @@ class PostService(val postRepository: PostRepository) {
     @Transactional
     fun update(postId: Long,title:String,content:String):Long{
         val post = presentPost(postId)
-        post.updatePost(title, content)
+        post.update(title, content)
         return postId
     }
     @Transactional

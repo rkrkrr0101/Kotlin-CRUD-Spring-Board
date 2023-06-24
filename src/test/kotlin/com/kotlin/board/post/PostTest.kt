@@ -1,11 +1,8 @@
 package com.kotlin.board.post
 
 import com.kotlin.board.comment.Comment
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class PostTest {
 
@@ -38,7 +35,7 @@ class PostTest {
         //g
         val post = Post("title", "content", "writerId")
         //w
-        post.updatePost("changeTitle","changeContent")
+        post.update("changeTitle","changeContent")
         //t
         assertThat(post.title).isEqualTo("changeTitle")
         assertThat(post.content).isEqualTo("changeContent")

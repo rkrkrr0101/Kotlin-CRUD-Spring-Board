@@ -15,5 +15,9 @@ class Comment(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id:Long?=null
 ):BaseEntity() {
+        fun update(content: String):Long?{
+                this.content=content
+                return id
+        }
 
 }

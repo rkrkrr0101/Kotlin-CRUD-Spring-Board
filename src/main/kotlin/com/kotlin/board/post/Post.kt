@@ -35,7 +35,11 @@ class Post(
         comments.add(comment)
         return comments.size
     }
-    fun updatePost(title:String,content: String):Long?{
+    fun deleteComment(comment: Comment):Int{
+        comments.remove(comment)
+        return comments.size
+    }
+    fun update(title:String, content: String):Long?{
         this.title=title
         this.content=content
         return id
