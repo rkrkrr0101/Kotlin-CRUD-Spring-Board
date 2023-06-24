@@ -11,8 +11,9 @@ class Comment(
 
         var content: String,
         var writerId:String,
-):BaseEntity() {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id:Long?=null
+):BaseEntity() {
+
 }

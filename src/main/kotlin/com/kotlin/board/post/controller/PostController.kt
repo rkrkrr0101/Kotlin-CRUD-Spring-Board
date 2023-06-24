@@ -6,6 +6,7 @@ import com.kotlin.board.post.dto.PostResponseDto
 import com.kotlin.board.post.service.PostService
 import com.kotlin.board.common.Constant
 import com.kotlin.board.common.Result
+import com.kotlin.board.common.domain.exception.ResourceNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -24,7 +25,7 @@ import java.lang.IllegalArgumentException
 class PostController(val postService: PostService) {
     @GetMapping("/{id}")
     fun findId(@PathVariable("id") id:Long):Result<PostResponseDto>{
-        val post = postService.findId(id)?:throw IllegalArgumentException("잘못된 id값")
+        val post = postService.findId(id)?:throw ResourceNotFoundException("post",id)
         return Result(PostResponseDto.domainToDto(post))
 
     }
