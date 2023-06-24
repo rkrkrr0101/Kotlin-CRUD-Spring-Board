@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.*
 class PostTest {
 
     @Test
-    fun plusViewCount() {
+    fun 게시물은_자신의_조회수를_증가시킬수있다() {
         //g
         val post = Post("title", "content", "writerId")
         //w
@@ -23,7 +23,7 @@ class PostTest {
     }
 
     @Test
-    fun addComment() {
+    fun 게시물은_자신의_댓글을_추가할수있다() {
         //g
         val post = Post("title", "content", "writerId")
         val comment = Comment("commentContent", "commentWriterId")
@@ -34,7 +34,7 @@ class PostTest {
     }
 
     @Test
-    fun updatePost() {
+    fun 게시물은_자신의_제목과_내용을_수정할수있다() {
         //g
         val post = Post("title", "content", "writerId")
         //w
