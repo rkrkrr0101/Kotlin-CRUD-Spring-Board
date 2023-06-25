@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import org.hibernate.annotations.BatchSize
 
+
 @Entity
 class Post(
         var title: String,
