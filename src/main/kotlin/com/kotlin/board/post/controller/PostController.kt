@@ -7,7 +7,6 @@ import com.kotlin.board.post.service.PostService
 import com.kotlin.board.common.Constant
 import com.kotlin.board.common.Result
 import com.kotlin.board.common.domain.exception.ResourceNotFoundException
-import com.kotlin.board.post.controller.validator.PostValidator
 import com.kotlin.board.post.dto.PostUpdateDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -37,27 +36,37 @@ class PostController(val postService: PostService) {
 
     }
     @PostMapping("/save")
-    fun save(@Validated @RequestBody requestDto: PostRequestDto,bindingResult: BindingResult):Result<Any?>{
+    fun save(@Validated @RequestBody requestDto: PostRequestDto,
+             bindingResult: BindingResult):Result<Any?>{
         if(bindingResult.hasErrors()){
             return Result(bindingResult.fieldError)
         }
         return Result(postService.save(requestDto))
     }
     @PostMapping("/add/comment/{id}")
-    fun commentSave(@PathVariable("id") postId: Long,@Validated @RequestBody commentRequestDto: CommentRequestDto):Long?{
-        return postService.addComment(postId,commentRequestDto)
+    fun commentSave(@PathVariable("id") postId: Long,
+                    @Validated @RequestBody commentRequestDto: CommentRequestDto,
+                    bindingResult: BindingResult):Result<Any?>{
+        if(bindingResult.hasErrors()){
+            return Result(bindingResult.fieldError)
+        }
+        return Result(postService.addComment(postId,commentRequestDto))
     }
     @PostMapping("/plus/viewcount/{id}")
-    fun plusViewCount(@PathVariable id: Long):Long?{
-        return postService.plusViewCount(id)
+    fun plusViewCount(@PathVariable id: Long):Result<Long?>{
+        return Result(postService.plusViewCount(id))
     }
     @PatchMapping("/{id}")
-    fun update(@PathVariable id:Long,@Validated @RequestBody requestDto: PostUpdateDto):Long?{
-        return postService.update(id,requestDto.title,requestDto.content)
+    fun update(@PathVariable id:Long,@Validated @RequestBody requestDto: PostUpdateDto,
+               bindingResult: BindingResult):Result<Any?>{
+        if(bindingResult.hasErrors()){
+            return com.kotlin.board.common.Result(bindingResult.fieldError)
+        }
+        return Result(postService.update(id,requestDto.title,requestDto.content))
     }
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long):Long?{
-        return postService.delete(id)
+    fun delete(@PathVariable id: Long):Result<Long?>{
+        return Result(postService.delete(id))
     }
     @GetMapping("/posts")
     fun findAllPaging(page:Int): Result<Page<PostResponseDto>> {
