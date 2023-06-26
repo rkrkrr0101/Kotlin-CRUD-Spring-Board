@@ -7,13 +7,17 @@ import com.kotlin.board.post.service.PostService
 import com.kotlin.board.common.Constant
 import com.kotlin.board.common.Result
 import com.kotlin.board.common.domain.exception.ResourceNotFoundException
+import com.kotlin.board.post.controller.validator.PostValidator
+import com.kotlin.board.post.dto.PostUpdateDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/post")
 class PostController(val postService: PostService) {
+
+
     @GetMapping("/{id}")
     fun findId(@PathVariable("id") id:Long):Result<PostResponseDto>{
         val post = postService.findId(id)?:throw ResourceNotFoundException("post",id)
@@ -31,8 +37,11 @@ class PostController(val postService: PostService) {
 
     }
     @PostMapping("/save")
-    fun save(@Validated @RequestBody requestDto: PostRequestDto):Long?{
-        return postService.save(requestDto)
+    fun save(@Validated @RequestBody requestDto: PostRequestDto,bindingResult: BindingResult):Result<Any?>{
+        if(bindingResult.hasErrors()){
+            return Result(bindingResult.fieldError)
+        }
+        return Result(postService.save(requestDto))
     }
     @PostMapping("/add/comment/{id}")
     fun commentSave(@PathVariable("id") postId: Long,@Validated @RequestBody commentRequestDto: CommentRequestDto):Long?{
@@ -43,7 +52,7 @@ class PostController(val postService: PostService) {
         return postService.plusViewCount(id)
     }
     @PatchMapping("/{id}")
-    fun update(@PathVariable id:Long,@Validated @RequestBody requestDto: PostRequestDto):Long?{
+    fun update(@PathVariable id:Long,@Validated @RequestBody requestDto: PostUpdateDto):Long?{
         return postService.update(id,requestDto.title,requestDto.content)
     }
     @DeleteMapping("/{id}")

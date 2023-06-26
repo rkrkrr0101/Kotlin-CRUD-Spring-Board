@@ -1,6 +1,7 @@
 package com.kotlin.board.post.dto
 
 import com.kotlin.board.post.Post
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.jetbrains.annotations.NotNull
 
