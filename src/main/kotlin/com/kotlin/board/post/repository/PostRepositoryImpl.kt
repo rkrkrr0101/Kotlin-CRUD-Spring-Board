@@ -12,7 +12,7 @@ class PostRepositoryImpl(val postJpaRepository: PostJpaRepository):PostRepositor
         return postJpaRepository.save(post)
     }
 
-    override fun delete(post: Post): Long? {
+    override fun delete(post: Post): Long {
         val id = post.id
         postJpaRepository.delete(post)
         return id

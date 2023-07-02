@@ -1,6 +1,7 @@
 package com.kotlin.board.post.service
 
 import com.kotlin.board.comment.dto.CommentRequestDto
+import com.kotlin.board.comment.repository.CommentRepository
 import com.kotlin.board.common.domain.exception.ResourceNotFoundException
 import com.kotlin.board.post.Post
 import com.kotlin.board.post.dto.PostRequestDto
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class PostService(val postRepository: PostRepository) {
+class PostService(val postRepository: PostRepository,val commentRepository: CommentRepository) {
     @Transactional
     fun save(postRequestDto: PostRequestDto):Long?{
         val entity = postRepository.save(postRequestDto.dtoToDomain())
@@ -44,11 +45,22 @@ class PostService(val postRepository: PostRepository) {
 
 
     @Transactional
-    fun addComment(postId:Long,requestDto:CommentRequestDto):Long{
+    fun addComment(postId:Long, commentRequestDto:CommentRequestDto):Long{
         val post:Post = presentPost(postId)
-        val comment = requestDto.dtoToDomain()
+        val comment =commentRepository.save(commentRequestDto.dtoToDomain())
         post.addComment(comment)
-        return postId
+        return comment.id
+    }
+    @Transactional
+    fun deleteComment(postId: Long,commentId:Long):Long{
+        val post:Post=presentPost(postId)
+        val comment = presentComment(commentId)
+
+        post.deleteComment(comment)
+        commentRepository.delete(comment)
+
+
+        return commentId
     }
     @Transactional
     fun plusViewCount(postId: Long):Long{
@@ -58,5 +70,6 @@ class PostService(val postRepository: PostRepository) {
 
     private fun presentPost(postId: Long) =
         postRepository.findById(postId) ?: throw ResourceNotFoundException("post",postId)
-
+    private fun presentComment(commentId: Long) =
+        commentRepository.findById(commentId) ?: throw ResourceNotFoundException("comment",commentId)
 }

@@ -2,7 +2,7 @@ package com.kotlin.board.comment.service
 
 import com.kotlin.board.comment.Comment
 import com.kotlin.board.common.domain.exception.ResourceNotFoundException
-import com.kotlin.board.mock.MockCommentRepository
+import com.kotlin.board.mock.FakeCommentRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -10,14 +10,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 
 class CommentServiceTest {
-    lateinit var commentRepository: MockCommentRepository
+    lateinit var commentRepository: FakeCommentRepository
     lateinit var commentService:CommentService
     @BeforeEach
     fun init(){
-        commentRepository= MockCommentRepository()
+        commentRepository= FakeCommentRepository()
         commentService= CommentService(commentRepository)
         for(i in 1..10){
-            commentRepository.testSave(Comment("${i}content","${i}writerId"))
+            commentRepository.save(Comment("${i}content","${i}writerId"))
         }
     }
 

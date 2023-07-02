@@ -1,7 +1,7 @@
 package com.kotlin.board.post.service
 
 import com.kotlin.board.comment.Comment
-import com.kotlin.board.mock.MockPostRepository
+import com.kotlin.board.mock.FakePostRepository
 import com.kotlin.board.post.Post
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach
 
 class PostMockRepositoryTest {
 
-    lateinit var postRepository:MockPostRepository
+    lateinit var postRepository:FakePostRepository
     @BeforeEach
     fun init(){
-        postRepository= MockPostRepository()
+        postRepository= FakePostRepository()
         val post1=Post("1title","1content","1writerid")
         val post2=Post("2title","2content","2writerid")
         val post3=Post("3title","3content","3writerid")

@@ -20,10 +20,10 @@ class Post(
         var viewCount:Long=0,
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id:Long?=null
+        var id:Long=0
 ) :BaseEntity(){
 
-    @OneToMany(cascade = [CascadeType.ALL])
+    @OneToMany
     @JoinColumn(name = "POST_ID")
     @BatchSize(size=20)
     val comments:MutableList<Comment> = mutableListOf()

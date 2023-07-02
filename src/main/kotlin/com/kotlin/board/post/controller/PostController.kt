@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -43,7 +44,7 @@ class PostController(val postService: PostService) {
         }
         return Result(postService.save(requestDto))
     }
-    @PostMapping("/add/comment/{id}")
+    @PostMapping("/comment/{id}")
     fun commentSave(@PathVariable("id") postId: Long,
                     @Validated @RequestBody commentRequestDto: CommentRequestDto,
                     bindingResult: BindingResult):Result<Any?>{
@@ -52,7 +53,13 @@ class PostController(val postService: PostService) {
         }
         return Result(postService.addComment(postId,commentRequestDto))
     }
-    @PostMapping("/plus/viewcount/{id}")
+    @DeleteMapping("/comment/{id}")
+    fun commentDelete(@PathVariable("id") postId: Long,
+                    @RequestParam commentId: Long):Result<Any?>{
+
+        return Result(postService.deleteComment(postId,commentId))
+    }
+    @PostMapping("/viewcount/plus/{id}")
     fun plusViewCount(@PathVariable id: Long):Result<Long?>{
         return Result(postService.plusViewCount(id))
     }

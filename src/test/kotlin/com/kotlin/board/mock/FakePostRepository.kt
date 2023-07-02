@@ -10,11 +10,11 @@ import java.lang.Integer.min
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicLong
 
-class MockPostRepository : PostRepository {
+class FakePostRepository : PostRepository {
     private var generatedId:AtomicLong= AtomicLong(0)
     private val posts:MutableList<Post> =Collections.synchronizedList(mutableListOf<Post>())
     override fun save(post: Post): Post {
-        if(post.id==null) {
+        if(post.id==null || post.id==0L) {
             val newPost = Post(
                 post.title,
                 post.content,
@@ -32,7 +32,7 @@ class MockPostRepository : PostRepository {
         }
     }
 
-    override fun delete(post: Post): Long? {
+    override fun delete(post: Post): Long {
         val removeIf = posts.removeIf { it.id == post.id }
         if (removeIf==false){
             throw IllegalArgumentException()

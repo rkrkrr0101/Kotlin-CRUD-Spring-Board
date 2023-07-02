@@ -13,9 +13,9 @@ class Comment(
         var writerId:String,
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id:Long?=null
+        var id:Long=0
 ):BaseEntity() {
-        fun update(content: String):Long?{
+        fun update(content: String):Long{
                 this.content=content
                 return id
         }

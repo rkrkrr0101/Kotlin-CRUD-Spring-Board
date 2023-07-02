@@ -9,4 +9,14 @@ class CommentRepositoryImpl(val commentRepository: CommentJpaRepository):Comment
     override fun findById(id: Long): Comment? {
         return commentRepository.findByIdOrNull(id)
     }
+
+    override fun save(comment: Comment): Comment {
+        return commentRepository.save(comment)
+    }
+
+    override fun delete(comment: Comment): Long {
+        val id = comment.id
+        commentRepository.delete(comment)
+        return id
+    }
 }

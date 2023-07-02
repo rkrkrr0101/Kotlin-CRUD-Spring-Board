@@ -4,11 +4,11 @@ import com.kotlin.board.comment.Comment
 import com.kotlin.board.comment.dto.CommentRequestDto
 import com.kotlin.board.common.Constant
 import com.kotlin.board.common.domain.exception.ResourceNotFoundException
-import com.kotlin.board.mock.MockPostRepository
+import com.kotlin.board.mock.FakeCommentRepository
+import com.kotlin.board.mock.FakePostRepository
 import com.kotlin.board.post.Post
 import com.kotlin.board.post.dto.PostRequestDto
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 
 import org.junit.jupiter.api.Test
 
@@ -18,14 +18,17 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 
 class PostServiceTest {
-    lateinit var postRepository: MockPostRepository
+    lateinit var postRepository: FakePostRepository
+    lateinit var commentRepository:FakeCommentRepository
     lateinit var postService:PostService
     @BeforeEach
     fun init(){
-        postRepository= MockPostRepository()
-        postService= PostService(postRepository)
+        postRepository= FakePostRepository()
+        commentRepository=FakeCommentRepository()
+        postService= PostService(postRepository,commentRepository)
         for(i in 1..10){
             postRepository.save(Post("${i}title","${i}content","${i}writerid"))
+
         }
     }
     @Test
@@ -54,6 +57,7 @@ class PostServiceTest {
         val resultPost1 = postService.findId(resultId1)?:throw Exception()
         val resultPost2 = postService.findId(resultId2)?:throw Exception()
         //t
+        println("resultPost1 = ${resultPost1.comments.size}")
         assertThat(resultPost1.title).isEqualTo("savetitle1")
         assertThat(resultPost2.title).isEqualTo("savetitle2")
 
@@ -106,8 +110,57 @@ class PostServiceTest {
     @Test
     fun 잘못된_게시물id를_넣으면_댓글을_추가하지않고_예외가_난다() {
         val comment1= Comment("commentContent1","commentWriterId1")
+        assertThrows<ResourceNotFoundException> {
+            postService.addComment(2000,CommentRequestDto.domainToDto(comment1))
+        }
     }
+    @Test
+    fun 올바른_게시물id와_댓글id를_넣어서_게시물에_댓글을_삭제할수있다() {
+        //g
+        val comment1= Comment("commentContent1","commentWriterId1")
+        val comment2= Comment("commentContent2","commentWriterId2")
 
+        val commentId1 = postService.addComment(2, CommentRequestDto.domainToDto(comment1))
+        val commentId2 =postService.addComment(2, CommentRequestDto.domainToDto(comment2))
+        //w
+        postService.deleteComment(2,commentId2)
+
+        val resultPost = postRepository.findById(2)?:throw Exception()
+        //t
+        assertThat(resultPost.comments.size).isEqualTo(1)
+    }
+    @Test
+    fun 올바른_게시물id와_잘못된댓글id를_넣으면_게시물에_댓글을_삭제하지못하고_예외가_발생한다() {
+        //g
+        val comment1= Comment("commentContent1","commentWriterId1")
+        val comment2= Comment("commentContent2","commentWriterId2")
+
+        val commentId1 = postService.addComment(2, CommentRequestDto.domainToDto(comment1))
+        val commentId2 =postService.addComment(2, CommentRequestDto.domainToDto(comment2))
+        val wrongCommentId=3000L
+        val resultPost = postRepository.findById(2)?:throw Exception()
+        //w,t
+        assertThrows<ResourceNotFoundException> {
+            postService.deleteComment(2,wrongCommentId)
+        }
+        assertThat(resultPost.comments.size).isEqualTo(2)
+    }
+    @Test
+    fun 잘못된_게시물id와_올바른댓글id를_넣으면_게시물에_댓글을_삭제하지못하고_예외가_발생한다() {
+        //g
+        val comment1= Comment("commentContent1","commentWriterId1")
+        val comment2= Comment("commentContent2","commentWriterId2")
+
+        val commentId1 = postService.addComment(2, CommentRequestDto.domainToDto(comment1))
+        val commentId2 =postService.addComment(2, CommentRequestDto.domainToDto(comment2))
+        val wrongCommentId=3000L
+        val resultPost = postRepository.findById(2)?:throw Exception()
+        //w,t
+        assertThrows<ResourceNotFoundException> {
+            postService.deleteComment(wrongCommentId,2)
+        }
+        assertThat(resultPost.comments.size).isEqualTo(2)
+    }
 
     @Test
     fun 게시물들을_페이징해서_가져올수있다() {
@@ -178,7 +231,7 @@ class PostServiceTest {
 
     }
     @Test
-    fun 해당제목이_없으면_빈배열을_반환한다() {
+    fun 게시글에_해당제목이_없으면_빈배열을_반환한다() {
         val pageSize=3
         val noSuchPageRequest = PageRequest.of(
             3, pageSize,
