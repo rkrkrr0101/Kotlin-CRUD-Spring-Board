@@ -5,11 +5,13 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.validation.constraints.NotNull
 
 @Entity
 class Comment(
-
+        @NotNull
         var content: String,
+        @NotNull
         var writerId:String,
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

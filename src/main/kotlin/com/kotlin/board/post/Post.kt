@@ -9,13 +9,18 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
+import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.BatchSize
+
 
 
 @Entity
 class Post(
+        @NotNull
         var title: String,
+        @NotNull
         var content: String,
+        @NotNull
         var writerId:String,
         var viewCount:Long=0,
         @Id
