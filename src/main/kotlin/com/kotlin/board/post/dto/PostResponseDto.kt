@@ -6,6 +6,7 @@ import com.kotlin.board.post.Post
 import java.time.LocalDateTime
 
 data class PostResponseDto(
+    val id:Long,
     val title:String,
     val content:String,
     val writerId:String,
@@ -17,6 +18,7 @@ data class PostResponseDto(
         fun domainToDto(post: Post): PostResponseDto {
 
             return PostResponseDto(
+                post.id,
                 post.title,
                 post.content,
                 post.writerId,
