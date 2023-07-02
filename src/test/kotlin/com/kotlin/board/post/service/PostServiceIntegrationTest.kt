@@ -4,34 +4,36 @@ import com.kotlin.board.comment.Comment
 import com.kotlin.board.comment.dto.CommentRequestDto
 import com.kotlin.board.common.Constant
 import com.kotlin.board.common.domain.exception.ResourceNotFoundException
-import com.kotlin.board.mock.FakeCommentRepository
-import com.kotlin.board.mock.FakePostRepository
 import com.kotlin.board.post.Post
 import com.kotlin.board.post.dto.PostRequestDto
+import com.kotlin.board.post.repository.PostRepository
 import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
-
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.transaction.annotation.Transactional
 
-class PostServiceTest {
-    lateinit var postRepository: FakePostRepository
-    lateinit var commentRepository:FakeCommentRepository
-    lateinit var postService:PostService
+@SpringBootTest
+@Transactional
+class PostServiceIntegrationTest(
+    @Autowired
+    var postRepository: PostRepository,
+    @Autowired
+    val postService:PostService) {
     val WRONGID=90000L
     @BeforeEach
     fun init(){
-        postRepository= FakePostRepository()
-        commentRepository=FakeCommentRepository()
-        postService= PostService(postRepository,commentRepository)
+
         for(i in 1..10){
             postRepository.save(Post("${i}title","${i}content","${i}writerid"))
 
         }
+
+
     }
     @Test
     fun 올바른_id를_입력하면_게시글을_단건검색할수있다() {
