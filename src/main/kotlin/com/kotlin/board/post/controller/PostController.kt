@@ -67,7 +67,7 @@ class PostController(val postService: PostService) {
     fun update(@PathVariable id:Long,@Validated @RequestBody requestDto: PostUpdateDto,
                bindingResult: BindingResult):Result<Any?>{
         if(bindingResult.hasErrors()){
-            return com.kotlin.board.common.Result(bindingResult.fieldError)
+            return Result(bindingResult.fieldError)
         }
         return Result(postService.update(id,requestDto.title,requestDto.content))
     }

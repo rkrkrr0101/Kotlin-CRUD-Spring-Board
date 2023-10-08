@@ -25,3 +25,10 @@ user레포서비스컨트롤러추가(
 post에 writerId user로 변경(oneToOne)
 comment에 writerId user로 변경(oneToOne)
 이러면 post에서 캐스케이드로 코멘트관리하는게 안되나 접점이 양군데 다생겨버리니까//캐스케이드 제거 완료
+
+
+
+이미지 저장
+    로컬에 저장한다치고,post에 이미지관련 필드 추가
+    dto에도 추가
+    이미지를 받아서 로컬에 저장하고,원래이름과 저장명과 경로필드에 저장,해당 경로를 저장후 response에 담아서 던져줌

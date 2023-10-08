@@ -4,6 +4,7 @@ import com.kotlin.board.post.Post
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.jetbrains.annotations.NotNull
+import org.springframework.web.multipart.MultipartFile
 
 data class PostRequestDto(
         @field:Size(min=1,max=72, message = "게시물의 제목길이를 확인해주세요")
@@ -12,8 +13,8 @@ data class PostRequestDto(
         val content:String,
         @field:Size(min=1,max=30,message = "글쓴이의 이름길이를 확인해주세요")
         val writerId:String="",
-
         val viewCount:Long=0) {
+
 
     companion object {
         fun domainToDto(post: Post): PostRequestDto {
